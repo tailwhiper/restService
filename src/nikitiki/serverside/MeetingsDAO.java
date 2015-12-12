@@ -1,5 +1,6 @@
 package nikitiki.serverside;
 
+import com.google.gson.Gson;
 import model.Meeting;
 import model.MeetingShortInfo;
 import model.Participant;
@@ -12,12 +13,14 @@ import java.util.List;
 
 public class MeetingsDAO {
     private static MeetingsDAO instance = new MeetingsDAO();
+    private Gson gson;
     private int currentId;
     private HashMap<Integer, Meeting> allmeetings;
 
     private MeetingsDAO() {
         allmeetings = new HashMap<Integer, Meeting>();
         currentId = 0;
+        gson = new Gson();
     }
 
     public static MeetingsDAO getInstance() {
@@ -27,6 +30,12 @@ public class MeetingsDAO {
     public List<Meeting> getAllMeetings() {
 
         return new ArrayList<Meeting>(allmeetings.values());
+
+    }
+
+    public String getAllMeetingsJson() {
+
+        return gson.toJson(new ArrayList<Meeting>(allmeetings.values()));
 
     }
 

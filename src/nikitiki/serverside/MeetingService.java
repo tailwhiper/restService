@@ -6,10 +6,8 @@ import model.MeetingShortInfo;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 
@@ -17,12 +15,10 @@ import java.util.List;
 public class MeetingService {
     MeetingsDAO dao;
 
-    @Context
-    SecurityContext securityContext;
 
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("text/html")
     @Path("/get/{id}")
     public Meeting getMeetingById(@PathParam("id") Integer id) {
 
@@ -31,11 +27,11 @@ public class MeetingService {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+
     @Path("/get/all/full")
     public Response getAllMeetings() {
         //fillMeetings();
-        return Response.status(200).entity(dao.getInstance().getAllMeetings()).build();
+        return Response.status(200).entity(dao.getInstance().getAllMeetingsJson()).build();
     }
 
     @GET

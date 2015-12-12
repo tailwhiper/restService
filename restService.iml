@@ -22,5 +22,7 @@
     <orderEntry type="library" name="Jersey-2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Jetty 9.3.6.v20151106" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="Jersey-2.2" level="project" />
+    <orderEntry type="library" name="joda-time:joda-time:2.9.1" level="project" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.5" level="project" />
   </component>
 </module>
