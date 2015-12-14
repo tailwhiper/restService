@@ -1,5 +1,5 @@
 function getAllMeetings() {
-    
+
     var x = new XMLHttpRequest();
 
     x.open("GET", "http://localhost:8080/meetings-service/meetings/full", true);
