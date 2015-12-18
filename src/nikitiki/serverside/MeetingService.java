@@ -60,11 +60,11 @@ public class MeetingService {
 
     // post to add data
     @PUT
-    @Path("/put/{title}/{summary}/{datestart}/{dateend}/{priority}")
-    public Response addMeeting(@PathParam("title") String title, @PathParam("summary") String summary, @PathParam("datestart") long datestart, @PathParam("dateend") long dateend, @PathParam("priority") int priority) {
+    @Path("/put/{title}/{summary}/{yystart}/{mmstart}/{ddstart}/{hhstart}/{minstart}/{yyend}/{mmend}/{ddend}/{hhend}/{minend}/{priority}")
+    public Response addMeeting(@PathParam("title") String title, @PathParam("summary") String summary, @PathParam("yystart") int yystart, @PathParam("mmstart") int mmstart, @PathParam("ddstart") int ddstart, @PathParam("hhstart") int hhstart, @PathParam("minstart") int minstart, @PathParam("yyend") int yyend, @PathParam("mmend") int mmend, @PathParam("ddend") int ddend, @PathParam("hhend") int hhend, @PathParam("minend") int minend, @PathParam("priority") int priority) {
 
 
-        dao.getInstance().AddMeeting(title, summary, new DateTime(datestart), new DateTime(dateend), priority);
+        dao.getInstance().AddMeeting(title, summary, new DateTime(yystart, mmstart, ddstart, hhstart, minstart), new DateTime(yyend, mmend, ddend, hhend, minend), priority);
 
 
         String output = "Meeting has been added.";
