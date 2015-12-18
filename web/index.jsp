@@ -92,7 +92,7 @@ minute:<input id="endminute"/>
         var x = new XMLHttpRequest();
 
         x.open("PUT", "http://localhost:8080/meetings-app/rest/meetings/put/" + document.getElementById('title').value + "/" + document.getElementById('summary').value + "/" + document.getElementById('startyear').value + "/" + document.getElementById('startmonth').value + "/" + document.getElementById('startday').value + "/" + document.getElementById('starthour').value + "/" + document.getElementById('startminute').value + "/" + document.getElementById('endyear').value + "/" + document.getElementById('endmonth').value + "/" + document.getElementById('endday').value + "/" + document.getElementById('endhour').value + "/" + document.getElementById('endminute').value + "/" + document.getElementById('priority').value, true);
-
+        x.setRequestHeader("Authorization", "Basic " + btoa("nikita" + ":" + "password"));
         // x.onload = function () {
         //     alert(x.responseText);
         // }
