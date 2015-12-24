@@ -4,9 +4,10 @@ import com.google.gson.Gson;
 import model.Meeting;
 import model.MeetingShortInfo;
 import model.Participant;
-import org.joda.time.DateTime;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,6 +40,14 @@ public class MeetingsDAO {
 
     }
 
+    public String getAllMeetingsShortInfoJson() {
+        List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
+        List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
+        for (Meeting m : meetings) {
+            infos.add(m.toShortInfo());
+        }
+        return gson.toJson(infos);
+    }
     public List<MeetingShortInfo> getAllMeetingsShortInfo() {
         List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
         List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
@@ -49,11 +58,13 @@ public class MeetingsDAO {
     }
 
     public List<MeetingShortInfo> getTodayMeetingsShortInfo(long datelong) {
-        DateTime date = new DateTime(datelong);
+        Date date = new Date(datelong);
         List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
         List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+
         for (Meeting m : meetings) {
-            if (m.getStartdate().toDate() == date.toDate())
+            if (sdf.format(m.getStartdate()).equals(sdf.format(date)))
                 infos.add(m.toShortInfo());
         }
         return infos;
@@ -63,14 +74,21 @@ public class MeetingsDAO {
         return allmeetings.get(id);
     }
 
-    public void AddMeeting(String title, String summary, DateTime datestart, DateTime dateend, int priority) {
+    public void AddMeeting(String title, String summary, Date datestart, Date dateend, int priority) {
         Meeting meeting = new Meeting(currentId, title, summary, datestart, dateend, null, priority);
         allmeetings.put(currentId, meeting);
         currentId++;
 
     }
 
-    public void AddMeeting(String title, String summary, DateTime datestart, DateTime dateend, List<Participant> p, int priority) {
+    public void AddMeeting(String json) {
+        Meeting m = gson.fromJson(json, Meeting.class);
+        m.setId(currentId);
+        allmeetings.put(currentId, m);
+        currentId++;
+    }
+
+    public void AddMeeting(String title, String summary, Date datestart, Date dateend, List<Participant> p, int priority) {
         Meeting meeting = new Meeting(currentId, title, summary, datestart, dateend, p, priority);
         allmeetings.put(currentId, meeting);
         currentId++;

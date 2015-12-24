@@ -2,6 +2,7 @@
 
 <%@ page import="model.Participant" %>
 <%@ page import="nikitiki.serverside.MeetingsDAO" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
@@ -13,7 +14,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>$Title$</title>
+    <title>Meetings Admin page</title>
 </head>
 <body>
 
@@ -45,6 +46,7 @@ minute:<input id="endminute"/>
 <button id="submit" onclick="putMeeting()">Add</button>
 <table title="All meetings" border="2">
 
+    ё
     <th>id</th>
     <th>Title</th>
     <th>Summary</th>
@@ -53,7 +55,8 @@ minute:<input id="endminute"/>
     <th>Priority</th>
     <th>Participants</th>
 
-    <% List<Meeting> meetings = meetingsDao.getInstance().getAllMeetings();
+    <% SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+        List<Meeting> meetings = meetingsDao.getInstance().getAllMeetings();
         for (Meeting m : meetings) {
     %>
     <tr>
@@ -63,8 +66,8 @@ minute:<input id="endminute"/>
         </td>
         <td><%= m.getSummary()%>
         </td>
-        <td><%=(m.getStartdate().getDayOfMonth()+"."+m.getStartdate().getMonthOfYear()+"."+m.getStartdate().getYear()+" "+m.getStartdate().getHourOfDay()+":"+m.getStartdate().getMinuteOfHour())%>
-        <td><%=(m.getEnddate().getDayOfMonth()+"."+m.getEnddate().getMonthOfYear()+"."+m.getEnddate().getYear()+" "+m.getEnddate().getHourOfDay()+":"+m.getEnddate().getMinuteOfHour())%>
+        <td><%=sdf.format(m.getStartdate())%>
+        <td><%=sdf.format(m.getEnddate()) %>
         <td><%= m.getPriority()%>
         </td>
                 <%
@@ -91,7 +94,20 @@ minute:<input id="endminute"/>
     function putMeeting() {
         var x = new XMLHttpRequest();
 
-        x.open("PUT", "http://localhost:8080/meetings-app/rest/meetings/put/" + document.getElementById('title').value + "/" + document.getElementById('summary').value + "/" + document.getElementById('startyear').value + "/" + document.getElementById('startmonth').value + "/" + document.getElementById('startday').value + "/" + document.getElementById('starthour').value + "/" + document.getElementById('startminute').value + "/" + document.getElementById('endyear').value + "/" + document.getElementById('endmonth').value + "/" + document.getElementById('endday').value + "/" + document.getElementById('endhour').value + "/" + document.getElementById('endminute').value + "/" + document.getElementById('priority').value, true);
+        x.open("PUT", "http://localhost:8080/meetings-app/rest/meetings/put/" +
+                document.getElementById('title').value + "/" +
+                document.getElementById('summary').value + "/" +
+                document.getElementById('startyear').value + "/" +
+                document.getElementById('startmonth').value + "/" +
+                document.getElementById('startday').value + "/" +
+                document.getElementById('starthour').value + "/" +
+                document.getElementById('startminute').value + "/" +
+                document.getElementById('endyear').value + "/" +
+                document.getElementById('endmonth').value + "/" +
+                document.getElementById('endday').value + "/" +
+                document.getElementById('endhour').value + "/" +
+                document.getElementById('endminute').value + "/" +
+                document.getElementById('priority').value, true);
         x.setRequestHeader("Authorization", "Basic " + btoa("nikita" + ":" + "password"));
         // x.onload = function () {
         //     alert(x.responseText);
