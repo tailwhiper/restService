@@ -1,13 +1,9 @@
 package nikitiki.serverside;
 
 
-import model.Meeting;
-import model.MeetingShortInfo;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 
 @Path("/meetings")
@@ -16,12 +12,10 @@ public class MeetingService {
 
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/get/{id}")
-    public Meeting getMeetingById(@PathParam("id") Integer id) {
+    public String getMeetingById(@PathParam("id") Integer id) {
 
-        return
-                dao.getInstance().getMeeting(id);
+        return dao.getInstance().getMeetingJson(id);
     }
 
     @GET
@@ -39,19 +33,17 @@ public class MeetingService {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/get/search/{part}")
-    public List<MeetingShortInfo> getMatched(@PathParam("part") String part) {
+    public String getMatched(@PathParam("part") String part) {
 
-        return dao.getInstance().Search(part);
+        return dao.getInstance().SearchJson(part);
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/get/date/{date}")
-    public List<MeetingShortInfo> getShortInfoForDate(@PathParam("date") long date) {
+    public String getShortInfoForDate(@PathParam("date") String date) {
 
-        return dao.getInstance().getTodayMeetingsShortInfo(date);
+        return dao.getInstance().getTodayMeetingsShortInfoJson(date);
     }
 
     // post to add data
@@ -84,13 +76,7 @@ public class MeetingService {
     @Path("/put/{id}/{name}/{job}")
     public String addParticipantToMeeting(@PathParam("id") int meetingId, @PathParam("name") String name, @PathParam("job") String job) {
 
-
-        dao.getInstance().AddParticipantToMeeting(meetingId, name, job);
-
-
-        String output = "Participant has been added to meeting.";
-        return output;
-
+        return dao.getInstance().AddParticipantToMeetingJson(meetingId, name, job);
     }
 
     @DELETE

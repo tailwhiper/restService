@@ -49,6 +49,7 @@ public class MeetingsDAO {
         }
         return gson.toJson(infos);
     }
+
     public List<MeetingShortInfo> getAllMeetingsShortInfo() {
         List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
         List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
@@ -71,8 +72,34 @@ public class MeetingsDAO {
         return infos;
     }
 
+    public String getTodayMeetingsShortInfoJson(String date) {
+
+        List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
+        List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        Date val = null;
+        try {
+            val = sdf.parse(date);
+
+            for (Meeting m : meetings) {
+                Date start = sdf.parse((sdf.format(m.getStartdate())));
+                Date end = sdf.parse((sdf.format(m.getEnddate())));
+                if ((val.getTime() >= start.getTime()) && (val.getTime() <= end.getTime()))
+                    infos.add(m.toShortInfo());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return gson.toJson("error with date format");
+        }
+        return gson.toJson(infos);
+    }
+
     public Meeting getMeeting(int id) {
         return allmeetings.get(id);
+    }
+
+    public String getMeetingJson(int id) {
+        return gson.toJson(allmeetings.get(id));
     }
 
     public String AddMeeting(String title, String summary, String datestart, String dateend, int priority) {
@@ -112,6 +139,10 @@ public class MeetingsDAO {
 
     }
 
+    public String AddParticipantToMeetingJson(int meetingId, String partName, String partJob) {
+        allmeetings.get(meetingId).addParticipant(new Participant(partName, partJob));
+        return gson.toJson("participant added.");
+    }
     public void DeleteParticipantFromMeeting(int meetingId, String partName, String partJob) {
         allmeetings.get(meetingId).deleteParticipant(new Participant(partName, partJob));
     }
@@ -130,6 +161,16 @@ public class MeetingsDAO {
                 infos.add(m.toShortInfo());
         }
         return infos;
+    }
+
+    public String SearchJson(String s) {
+        List<MeetingShortInfo> infos = new ArrayList<MeetingShortInfo>();
+        List<Meeting> meetings = new ArrayList<Meeting>(allmeetings.values());
+        for (Meeting m : meetings) {
+            if ((m.getTitle().contains(s)) || (m.getSummary().contains(s)))
+                infos.add(m.toShortInfo());
+        }
+        return gson.toJson(infos);
     }
 
 }
