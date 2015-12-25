@@ -5,6 +5,7 @@ import model.Meeting;
 import model.MeetingShortInfo;
 import model.Participant;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,10 +75,21 @@ public class MeetingsDAO {
         return allmeetings.get(id);
     }
 
-    public void AddMeeting(String title, String summary, Date datestart, Date dateend, int priority) {
-        Meeting meeting = new Meeting(currentId, title, summary, datestart, dateend, null, priority);
-        allmeetings.put(currentId, meeting);
-        currentId++;
+    public String AddMeeting(String title, String summary, String datestart, String dateend, int priority) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd-HH:mm");
+        Meeting meeting = null;
+        String s = null;
+        try {
+            meeting = new Meeting(currentId, title, summary, sdf.parse(datestart), sdf.parse(dateend), null, priority);
+            allmeetings.put(currentId, meeting);
+            currentId++;
+            s = "Meeting added succesfully";
+        } catch (ParseException e) {
+            e.printStackTrace();
+            s = "Error. Please add meeting again";
+
+        }
+        return gson.toJson(s);
 
     }
 
