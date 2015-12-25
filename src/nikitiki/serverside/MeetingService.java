@@ -7,7 +7,8 @@ import model.MeetingShortInfo;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -60,10 +61,29 @@ public class MeetingService {
     // post to add data
     @PUT
     @Path("/put/{title}/{summary}/{yystart}/{mmstart}/{ddstart}/{hhstart}/{minstart}/{yyend}/{mmend}/{ddend}/{hhend}/{minend}/{priority}")
-    public Response addMeeting(@PathParam("title") String title, @PathParam("summary") String summary, @PathParam("yystart") int yystart, @PathParam("mmstart") int mmstart, @PathParam("ddstart") int ddstart, @PathParam("hhstart") int hhstart, @PathParam("minstart") int minstart, @PathParam("yyend") int yyend, @PathParam("mmend") int mmend, @PathParam("ddend") int ddend, @PathParam("hhend") int hhend, @PathParam("minend") int minend, @PathParam("priority") int priority) {
+    public Response addMeeting(@PathParam("title") String title,
+                               @PathParam("summary") String summary,
+                               @PathParam("yystart") int yystart,
+                               @PathParam("mmstart") int mmstart,
+                               @PathParam("ddstart") int ddstart,
+                               @PathParam("hhstart") int hhstart,
+                               @PathParam("minstart") int minstart,
+                               @PathParam("yyend") int yyend,
+                               @PathParam("mmend") int mmend,
+                               @PathParam("ddend") int ddend,
+                               @PathParam("hhend") int hhend,
+                               @PathParam("minend") int minend,
+                               @PathParam("priority") int priority) {
 
-
-        dao.getInstance().AddMeeting(title, summary, new Date(yystart, mmstart, ddstart, hhstart, minstart), new Date(yyend, mmend, ddend, hhend, minend), priority);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String startDate = yystart + "/" + mmstart + "/" + ddstart + " " + hhstart + ":" + minstart;
+        String endDate = yyend + "/" + mmend + "/" + ddend + " " + hhend + ":" + minend;
+        try {
+            dao.getInstance().AddMeeting(title, summary, sdf.parse(startDate), sdf.parse(endDate), priority);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).entity("errror in dates").build();
+        }
 
 
         String output = "Meeting has been added.";
