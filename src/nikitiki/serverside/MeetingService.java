@@ -115,10 +115,11 @@ public class MeetingService {
 
     @DELETE
     @Path("/delete/{id}")
-    public Response deleteMeeting(@PathParam("id") int id) {
-        dao.getInstance().DeleteMeeting(id);
-        String output = "Meeting has been deleted successfully.";
-        return Response.status(200).entity(output).build();
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteMeeting(@PathParam("id") int id) {
+        return dao.getInstance().DeleteMeeting(id);
+
+        
     }
 
 }

@@ -104,8 +104,10 @@ public class MeetingsDAO {
         allmeetings.get(meetingId).deleteParticipant(new Participant(partName, partJob));
     }
 
-    public void DeleteMeeting(int id) {
+    public String DeleteMeeting(int id) {
         allmeetings.remove(id);
+        String s = "Meeting was deleted on server";
+        return gson.toJson(s);
     }
 
     public List<MeetingShortInfo> Search(String s) {
